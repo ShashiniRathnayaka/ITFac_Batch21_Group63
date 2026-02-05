@@ -1,7 +1,8 @@
-package com.qatraining.pages;
+package com.qatraining.pages.authentication;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.qatraining.pages.BasePage;
 
 /**
  * Page Object for Login Page (UI)

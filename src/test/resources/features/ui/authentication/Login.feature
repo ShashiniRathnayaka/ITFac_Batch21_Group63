@@ -16,9 +16,9 @@ Feature: User Authentication - Login Functionality
     And the dashboard page should be displayed
 
     Examples:
-      | username  | password  |
-      | admin     | admin123  |
-      | testuser  | test123   |
+      | username | password |
+      | admin    | admin123 |
+      | testuser | test123  |
 
   @Negative
   Scenario: Login with invalid username or password
@@ -28,14 +28,15 @@ Feature: User Authentication - Login Functionality
     Then the user should see an error message "Invalid username or password."
     And the user should remain on the login page
 
+  @Negative
   Scenario Outline: Login with missing credentials
-  When the user enters username "<username>"
-  And the user enters password "<password>"
-  And the user clicks on the login button
-  Then the user should remain on the login page
+    When the user enters username "<username>"
+    And the user enters password "<password>"
+    And the user clicks on the login button
+    Then the user should remain on the login page
 
     Examples:
-      | username | password | message                          |
-      |          | admin123 | Username is required             |
-      | admin    |          | Password is required             |
-      |          |          | Username and Password required   |
+      | username | password |
+      |          | admin123 |
+      | admin    |          |
+      |          |          |

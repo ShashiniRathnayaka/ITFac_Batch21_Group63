@@ -1,7 +1,8 @@
-package com.qatraining.stepdefinitions.ui;
+package com.qatraining.stepdefinitions.ui.authentication;
 
 import com.qatraining.drivers.PlaywrightDriverManager;
-import com.qatraining.pages.LoginPage;
+import com.qatraining.pages.authentication.LoginPage;
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
