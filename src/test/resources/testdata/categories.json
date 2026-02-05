@@ -1,0 +1,29 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "Flowers",
+      "description": "Various flowering plants for gardens and decoration"
+    },
+    {
+      "id": 2,
+      "name": "Indoor Plants",
+      "description": "Plants suitable for indoor environments"
+    },
+    {
+      "id": 3,
+      "name": "Outdoor Plants",
+      "description": "Plants for outdoor gardens and landscapes"
+    },
+    {
+      "id": 4,
+      "name": "Herbs",
+      "description": "Medicinal and culinary herbs"
+    },
+    {
+      "id": 5,
+      "name": "Succulents",
+      "description": "Water-storing plants requiring minimal maintenance"
+    }
+  ]
+}

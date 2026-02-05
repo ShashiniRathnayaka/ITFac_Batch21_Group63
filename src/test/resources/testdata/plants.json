@@ -1,0 +1,58 @@
+{
+  "plants": [
+    {
+      "id": 1,
+      "name": "Rose",
+      "description": "Beautiful red rose with thorns",
+      "categoryId": 1,
+      "categoryName": "Flowers",
+      "price": 25.99,
+      "stock": 50
+    },
+    {
+      "id": 2,
+      "name": "Tulip",
+      "description": "Spring flower available in various colors",
+      "categoryId": 1,
+      "categoryName": "Flowers",
+      "price": 20.00,
+      "stock": 75
+    },
+    {
+      "id": 3,
+      "name": "Orchid",
+      "description": "Exotic flowering plant",
+      "categoryId": 1,
+      "categoryName": "Flowers",
+      "price": 35.00,
+      "stock": 30
+    },
+    {
+      "id": 4,
+      "name": "Sunflower",
+      "description": "Bright yellow flower that follows the sun",
+      "categoryId": 1,
+      "categoryName": "Flowers",
+      "price": 15.50,
+      "stock": 100
+    },
+    {
+      "id": 5,
+      "name": "Aloe Vera",
+      "description": "Medicinal succulent plant",
+      "categoryId": 2,
+      "categoryName": "Indoor Plants",
+      "price": 12.99,
+      "stock": 60
+    },
+    {
+      "id": 6,
+      "name": "Snake Plant",
+      "description": "Low maintenance indoor plant",
+      "categoryId": 2,
+      "categoryName": "Indoor Plants",
+      "price": 18.50,
+      "stock": 45
+    }
+  ]
+}

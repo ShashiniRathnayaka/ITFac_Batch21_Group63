@@ -1,0 +1,46 @@
+# Target folders
+target/
+test-output/
+allure-results/
+allure-report/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+logs/
+
+# Screenshots
+screenshots/
+*.png
+
+# Maven
+dependency-reduced-pom.xml
+
+# Playwright
+.playwright/
+
+# Test reports
+cucumber-reports/
+surefire-reports/
+failsafe-reports/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Application specific
+application.properties.local
+config.properties.local
