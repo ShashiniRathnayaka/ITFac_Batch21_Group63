@@ -1,4 +1,4 @@
-package com.qatraining.stepdefinitions.api.plants;
+package com.qatraining.stepdefinitions.api.dashboard;
 
 import com.qatraining.api.APIClient;
 import com.qatraining.config.ConfigManager;

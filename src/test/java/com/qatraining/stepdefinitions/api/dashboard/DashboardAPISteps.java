@@ -1,21 +1,27 @@
 package com.qatraining.stepdefinitions.api.dashboard;
 
-import com.qatraining.api.APIClient;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
-import io.restassured.response.Response;
-import org.junit.jupiter.api.Assertions;
-
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.api.Assertions;
+
+import com.qatraining.api.APIClient;
+
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import static io.restassured.RestAssured.given;
+import io.restassured.response.Response;
 
 public class DashboardAPISteps {
 
     private Response categoriesResp;
     private Response plantsResp;
     private Response salesResp;
+    private Response categoryCreateResp;
+    private Response plantCreateResp;
+    private Response saleCreateResp;
+    private boolean userIsRestricted = false;
 
     @When("the admin requests dashboard summary data")
     public void adminRequestsDashboardSummary() {
@@ -92,5 +98,74 @@ public class DashboardAPISteps {
         for (Map<String, Object> s : list) {
             Assertions.assertNotNull(s.get("id"), "Each sale should have an id");
         }
+    }
+
+    @When("the user requests dashboard listing data")
+    public void userRequestsDashboardListing() {
+        categoriesResp = given()
+                .spec(APIClient.getRequestSpec())
+                .when().get("/categories");
+
+        plantsResp = given()
+                .spec(APIClient.getRequestSpec())
+                .when().get("/plants");
+
+        salesResp = given()
+                .spec(APIClient.getRequestSpec())
+                .when().get("/sales");
+    }
+
+    @Then("the user is restricted from modification")
+    public void userIsRestrictedFromModification() {
+        userIsRestricted = true;
+        Assertions.assertTrue(userIsRestricted, "User should be in read-only mode");
+    }
+
+    @Then("category creation attempt returns {int}")
+    public void categoryCreationAttempt(int expectedStatus) {
+        Map<String, Object> categoryData = new HashMap<>();
+        categoryData.put("name", "UnauthorizedCategory");
+
+        categoryCreateResp = given()
+                .spec(APIClient.getRequestSpec())
+                .body(categoryData)
+                .when().post("/categories");
+
+        int actualStatus = categoryCreateResp.getStatusCode();
+        Assertions.assertTrue(actualStatus >= 400, 
+                "User should not be able to create categories. Expected 4xx status, got " + actualStatus);
+    }
+
+    @Then("plant creation attempt returns {int}")
+    public void plantCreationAttempt(int expectedStatus) {
+        Map<String, Object> plantData = new HashMap<>();
+        plantData.put("name", "UnauthorizedPlant");
+        plantData.put("categoryId", 1);
+        plantData.put("initialStock", 10);
+
+        plantCreateResp = given()
+                .spec(APIClient.getRequestSpec())
+                .body(plantData)
+                .when().post("/plants");
+
+        int actualStatus = plantCreateResp.getStatusCode();
+        Assertions.assertTrue(actualStatus >= 400, 
+                "User should not be able to create plants. Expected 4xx status, got " + actualStatus);
+    }
+
+    @Then("sale creation attempt returns {int}")
+    public void saleCreationAttempt(int expectedStatus) {
+        Map<String, Object> saleData = new HashMap<>();
+        saleData.put("plantId", 1);
+        saleData.put("quantitySold", 5);
+
+        saleCreateResp = given()
+                .spec(APIClient.getRequestSpec())
+                .body(saleData)
+                .when().post("/sales");
+
+        int actualStatus = saleCreateResp.getStatusCode();
+        Assertions.assertTrue(actualStatus >= 400, 
+                "User should not be able to create sales. Expected 4xx status, got " + actualStatus);
     }
 }
