@@ -15,3 +15,15 @@ Feature: Dashboard API
     Then GET to the categories endpoint returns 200 and non-empty list
     And GET to the plants endpoint returns 200 and non-empty list
     And GET to the sales endpoint returns 200 and non-empty list
+
+  @ReadOnly @User
+  Scenario: API_DASH_007 - User retrieves dashboard data in read-only mode
+    Given the user is authenticated
+    When the user requests dashboard listing data
+    Then GET to the categories endpoint returns 200 and non-empty list
+    And GET to the plants endpoint returns 200 and non-empty list
+    And GET to the sales endpoint returns 200 and non-empty list
+    And the user is restricted from modification
+    And category creation attempt returns 403
+    And plant creation attempt returns 403
+    And sale creation attempt returns 403

@@ -1,4 +1,4 @@
-package com.qatraining.stepdefinitions.api.categories;
+package com.qatraining.stepdefinitions.api.dashboard;
 
 import java.util.HashMap;
 import java.util.List;
