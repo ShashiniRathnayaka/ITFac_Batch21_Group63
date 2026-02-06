@@ -1,20 +1,20 @@
 package com.qatraining.stepdefinitions.api.categories;
 
-import com.qatraining.api.APIClient;
-import com.qatraining.config.ConfigManager;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
-import io.restassured.response.Response;
-import org.junit.jupiter.api.Assertions;
-import org.apache.commons.lang3.RandomStringUtils; 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Assertions;
+
+import com.qatraining.api.APIClient;
+import com.qatraining.config.ConfigManager;
+
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import static io.restassured.RestAssured.given;
+import io.restassured.response.Response;
 
 public class CategoryAPISteps {
 
@@ -24,29 +24,6 @@ public class CategoryAPISteps {
     private Integer subCategoryId;
     private String parentCategoryName;
     private String subCategoryName;
-
-    @Given("the admin is authenticated")
-    public void adminIsAuthenticated() {
-        Map<String, Object> body = new HashMap<>();
-        body.put("username", config.getAdminUsername());
-        body.put("password", config.getAdminPassword());
-
-        Response resp = given()
-                .spec(APIClient.getRequestSpec())
-                .body(body)
-                .when().post("/auth/login");
-
-        Assertions.assertEquals(200, resp.getStatusCode(), "Authentication should return 200");
-
-        String token = null;
-        if (resp.jsonPath().getString("token") != null) token = resp.jsonPath().getString("token");
-        if (token == null && resp.jsonPath().getString("accessToken") != null)
-            token = resp.jsonPath().getString("accessToken");
-
-        Assertions.assertNotNull(token, "Auth token should be present in login response");
-
-        APIClient.setAuthToken(token);
-    }
 
     @When("the admin creates a main category with name prefix {string}")
     public void adminCreatesMainCategory(String prefix) {
