@@ -20,12 +20,12 @@ Feature: Categories API - Admin Create Category
     And Admin includes the authorization token in the request header
     Then API returns 400 Bad Request status code
     And Validation error message is returned
-    And Validation error message contains "Category name must be between 3 and 10 characters"
+    And Validation error message contains "<expectedMessage>"
     And Category is not created
     And No data is saved in the database
 
     Examples:
-      | categoryName    |
-      |                 |
-      | ab              |
-      | 12345678901     |
+      | categoryName    | expectedMessage                                       |
+      |                 | Category name is mandatory                            |
+      | ab              | Category name must be between 3 and 10 characters     |
+      | 12345678901     | Category name must be between 3 and 10 characters     |

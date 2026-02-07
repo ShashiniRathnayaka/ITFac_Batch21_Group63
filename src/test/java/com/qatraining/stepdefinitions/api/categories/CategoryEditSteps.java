@@ -120,4 +120,91 @@ public class CategoryEditSteps {
 
         System.out.println("Verified: Updated category data persisted in database");
     }
+
+    @When("User sends a PUT request to {string} with category id")
+    public void userSendsPutRequestWithCategoryId(String endpoint) {
+        // Get an existing category ID
+        categoryEditPageAPI.getCategoriesList();
+        String response = categoryEditPageAPI.getResponseBody();
+        JSONArray arr = new JSONArray(response);
+        assertTrue(arr.length() > 0, "No categories available to update");
+        testCategoryId = arr.getJSONObject(0).getInt("id");
+
+        // Build update body with valid payload
+        updateBody = new HashMap<>();
+        updateBody.put("name", "Newcat");
+
+        System.out.println("User attempting PUT " + endpoint + "/" + testCategoryId);
+
+        categoryEditPageAPI.updateCategory(testCategoryId, updateBody);
+
+        assertNotNull(
+                categoryEditPageAPI.getResponse(),
+                "API response is null. PUT request may not have been sent.");
+    }
+
+    @When("User includes a valid payload in the request body")
+    public void userIncludesValidPayloadInRequestBody() {
+        // This step is informational - the payload is already included in the PUT
+        // request
+        System.out.println("Valid payload included in request body: " + updateBody);
+    }
+
+    @Then("API returns {int} Forbidden status code")
+    public void apiReturnsForbiddenStatusCode(int expectedStatusCode) {
+        int actualStatus = categoryEditPageAPI.getStatusCode();
+        System.out.println("Status Code: " + actualStatus);
+        System.out.println("Response Body: " + categoryEditPageAPI.getResponseBody());
+        assertEquals(expectedStatusCode, actualStatus,
+                "Expected " + expectedStatusCode + " Forbidden but got " + actualStatus);
+    }
+
+    @Then("Error message returned: {string}")
+    public void errorMessageReturned(String expectedError) {
+        String responseBody = categoryEditPageAPI.getResponseBody();
+        assertNotNull(responseBody, "Response body should not be null");
+
+        JSONObject responseJson = new JSONObject(responseBody);
+        assertTrue(responseJson.has("error"), "Response should contain 'error' field");
+
+        String actualError = responseJson.getString("error");
+        assertEquals(expectedError, actualError,
+                "Expected error message '" + expectedError + "' but got '" + actualError + "'");
+
+        // Verify additional error response fields
+        assertTrue(responseJson.has("status"), "Response should contain 'status' field");
+        assertTrue(responseJson.has("timestamp"), "Response should contain 'timestamp' field");
+        assertTrue(responseJson.has("path"), "Response should contain 'path' field");
+
+        System.out.println("Verified: Error message - " + actualError);
+    }
+
+    @Then("Category data is not updated via API")
+    public void categoryDataIsNotUpdated() {
+        // Verify the category was not updated by fetching the current data
+        categoryEditPageAPI.getCategoriesList();
+        String response = categoryEditPageAPI.getResponseBody();
+        JSONArray arr = new JSONArray(response);
+
+        // Find the category we attempted to update
+        boolean categoryFound = false;
+        for (int i = 0; i < arr.length(); i++) {
+            JSONObject category = arr.getJSONObject(i);
+            if (category.getInt("id") == testCategoryId) {
+                categoryFound = true;
+                String currentName = category.getString("name");
+
+                // Verify name was NOT changed to "Newcat"
+                assertNotEquals("Newcat", currentName,
+                        "Category name should not be updated to 'Newcat' for USER role");
+
+                System.out.println("Verified: Category ID " + testCategoryId + " was not updated (current name: "
+                        + currentName + ")");
+                break;
+            }
+        }
+
+        assertTrue(categoryFound, "Category should still exist in the system");
+        System.out.println("Verified: Category data remains unchanged");
+    }
 }

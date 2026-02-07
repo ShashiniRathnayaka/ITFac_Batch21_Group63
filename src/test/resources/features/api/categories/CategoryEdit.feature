@@ -1,6 +1,7 @@
-@API @Categories @adminapi @Smoke @Positive @API_CATEGORY_ADMIN_004
+@API @Categories
 Feature: Categories API - Admin Update Category
 
+  @adminapi @Smoke @Positive @API_CATEGORY_ADMIN_004
   Scenario: API_CATEGORY_ADMIN_004 - Verify admin can update an existing category
     Given Admin is authenticated with ADMIN role
     And A valid admin access token is available
@@ -12,3 +13,15 @@ Feature: Categories API - Admin Update Category
     And Category details are updated successfully
     And Response body reflects the updated category values
     And Updated category data is saved in the database
+
+  @nonadminapi @Negative @API_CATEGORY_USER_004
+  Scenario: API_CATEGORY_USER_004 - Verify user cannot update a category
+    Given User is authenticated with USER role
+    And Valid user access token is available
+    And Category record exists
+    When User sends a PUT request to "/api/categories" with category id
+    And User includes a valid payload in the request body
+    And User includes the authorization token in the request header
+    Then API returns 403 Forbidden status code
+    And Error message returned: "Forbidden"
+    And Category data is not updated via API

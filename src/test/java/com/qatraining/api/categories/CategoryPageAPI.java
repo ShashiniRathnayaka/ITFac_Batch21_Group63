@@ -31,6 +31,55 @@ public class CategoryPageAPI {
     }
 
     /**
+     * Send GET request to retrieve paginated categories
+     * Endpoint: GET /api/categories/page
+     * 
+     * @param page      the page number (0-indexed)
+     * @param size      the number of records per page
+     * @param sortField the field to sort by
+     * @param sortDir   the sort direction (asc or desc)
+     */
+    public void getCategoriesWithPagination(int page, int size, String sortField, String sortDir) {
+        Playwright playwright = Playwright.create();
+        APIRequestContext request = playwright.request().newContext();
+
+        String url = String.format("%s/api/categories/page?page=%d&size=%d&sortField=%s&sortDir=%s",
+                BASE_URL, page, size, sortField, sortDir);
+
+        response = request.get(
+                url,
+                RequestOptions.create()
+                        .setHeader("Authorization", "Bearer " + TokenHolder.getToken())
+                        .setHeader("accept", "application/json"));
+
+        System.out.println("GET " + url + " - Status: " + response.status());
+    }
+
+    /**
+     * Send GET request to search categories by name
+     * Endpoint: GET /api/categories/page?name={searchKeyword}
+     * 
+     * @param searchKeyword the keyword to search for in category names
+     * @param sortField     the field to sort by
+     * @param sortDir       the sort direction (asc or desc)
+     */
+    public void searchCategoriesByName(String searchKeyword, String sortField, String sortDir) {
+        Playwright playwright = Playwright.create();
+        APIRequestContext request = playwright.request().newContext();
+
+        String url = String.format("%s/api/categories/page?name=%s&sortField=%s&sortDir=%s",
+                BASE_URL, searchKeyword, sortField, sortDir);
+
+        response = request.get(
+                url,
+                RequestOptions.create()
+                        .setHeader("Authorization", "Bearer " + TokenHolder.getToken())
+                        .setHeader("accept", "application/json"));
+
+        System.out.println("GET " + url + " - Status: " + response.status());
+    }
+
+    /**
      * Get the HTTP status code from the response
      * 
      * @return status code
