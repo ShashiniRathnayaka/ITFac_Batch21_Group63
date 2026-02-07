@@ -17,18 +17,27 @@ public class AuthHooks {
             adminToken = LoginUtil.login("admin", "admin123");
             System.out.println(
                     "DEBUG: Login successful, token: " + (adminToken != null ? "Token received" : "Token is null"));
+            TokenHolder.setAdminToken(adminToken);
         } else {
             System.out.println("DEBUG: Using cached adminToken");
         }
-        TokenHolder.setToken(adminToken);
-        System.out.println("DEBUG: Token set in TokenHolder");
+        TokenHolder.useAdminToken();
+        System.out.println("DEBUG: Admin token activated in TokenHolder");
     }
 
     @Before("@nonadminapi")
     public void loginAsNonAdmin() {
+        System.out.println("DEBUG: Executing loginAsNonAdmin hook");
         if (nonAdminToken == null) {
+            System.out.println("DEBUG: nonAdminToken is null, performing login...");
             nonAdminToken = LoginUtil.login("testuser", "test123");
+            System.out.println(
+                    "DEBUG: Login successful, token: " + (nonAdminToken != null ? "Token received" : "Token is null"));
+            TokenHolder.setUserToken(nonAdminToken);
+        } else {
+            System.out.println("DEBUG: Using cached nonAdminToken");
         }
-        TokenHolder.setToken(nonAdminToken);
+        TokenHolder.useUserToken();
+        System.out.println("DEBUG: User token activated in TokenHolder");
     }
 }
