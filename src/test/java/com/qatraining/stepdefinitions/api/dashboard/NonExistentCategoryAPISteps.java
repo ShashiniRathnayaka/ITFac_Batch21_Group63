@@ -19,7 +19,7 @@ public class NonExistentCategoryAPISteps {
 
     private Response lastResponse;
     private static final ConfigManager config = ConfigManager.getInstance();
-    private static final String API_BASE_URL = "http://localhost:8080/api";
+    private static final String API_BASE_URL = ConfigManager.getInstance().getApiBaseUrl();
     private static final Integer NON_EXISTENT_CATEGORY_ID = 999999;
     private Integer[] invalidIds = {999999, 888888, 777777};
     private int validResponseCount = 0;

@@ -19,8 +19,8 @@ public class AuthenticationAPISteps {
 
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin123";
-    private static final String USER_USERNAME = "user";
-    private static final String USER_PASSWORD = "user@123";
+    private static final String USER_USERNAME = "testuser";
+    private static final String USER_PASSWORD = "test123";
 
     @Given("the admin is authenticated")
     public void authenticateAsAdmin() {
@@ -29,7 +29,7 @@ public class AuthenticationAPISteps {
         loginBody.put("password", ADMIN_PASSWORD);
 
         Response response = given()
-                .contentType("application/json")
+                .spec(APIClient.getRequestSpec())
                 .body(loginBody)
                 .when()
                 .post("/auth/login");
@@ -50,7 +50,7 @@ public class AuthenticationAPISteps {
         loginBody.put("password", USER_PASSWORD);
 
         Response response = given()
-                .contentType("application/json")
+                .spec(APIClient.getRequestSpec())
                 .body(loginBody)
                 .when()
                 .post("/auth/login");

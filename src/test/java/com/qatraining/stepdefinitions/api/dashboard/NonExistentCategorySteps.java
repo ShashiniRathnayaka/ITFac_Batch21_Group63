@@ -19,7 +19,7 @@ public class NonExistentCategorySteps {
 
     private Response lastResponse;
     private static final ConfigManager config = ConfigManager.getInstance();
-    private static final String API_BASE_URL = "http://localhost:8080/api";
+    private static final String API_BASE_URL = ConfigManager.getInstance().getApiBaseUrl();
 
     @When("the admin requests a non-existent category with ID {int}")
     public void adminRequestsNonExistentCategory(int categoryId) {

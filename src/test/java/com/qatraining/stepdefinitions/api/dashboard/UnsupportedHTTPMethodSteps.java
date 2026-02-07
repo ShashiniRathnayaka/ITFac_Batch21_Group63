@@ -20,11 +20,11 @@ public class UnsupportedHTTPMethodSteps {
 
     private Response lastResponse;
     private static final ConfigManager config = ConfigManager.getInstance();
-    private static final String API_BASE_URL = "http://localhost:8080/api";
+    private static final String API_BASE_URL = ConfigManager.getInstance().getApiBaseUrl();
     private String currentMethod;
     private String currentEndpoint;
 
-    @When("the admin sends a PUT request to /api/categories")
+    @When("^the admin sends a PUT request to /api/categories$")
     public void sendPutRequestToCategories() {
         currentMethod = "PUT";
         currentEndpoint = "/api/categories";
@@ -42,7 +42,7 @@ public class UnsupportedHTTPMethodSteps {
             .response();
     }
 
-    @When("the admin sends a DELETE request to /api/categories")
+    @When("^the admin sends a DELETE request to /api/categories$")
     public void sendDeleteRequestToCategories() {
         currentMethod = "DELETE";
         currentEndpoint = "/api/categories";
@@ -56,7 +56,7 @@ public class UnsupportedHTTPMethodSteps {
             .response();
     }
 
-    @When("the admin sends a PATCH request to /api/plants")
+    @When("^the admin sends a PATCH request to /api/plants$")
     public void sendPatchRequestToPlants() {
         currentMethod = "PATCH";
         currentEndpoint = "/api/plants";
@@ -73,7 +73,7 @@ public class UnsupportedHTTPMethodSteps {
             .response();
     }
 
-    @When("the admin sends an OPTIONS request to /api/sales")
+    @When("^the admin sends an OPTIONS request to /api/sales$")
     public void sendOptionsRequestToSales() {
         currentMethod = "OPTIONS";
         currentEndpoint = "/api/sales";
@@ -94,7 +94,7 @@ public class UnsupportedHTTPMethodSteps {
             currentMethod + " request to " + currentEndpoint + " should return 405, but got: " + statusCode);
     }
 
-    @Then("the response status should indicate method handling \\(200 or 405)")
+    @Then("^the response status should indicate method handling \\(200 or 405\\)$")
     public void verifyMethodHandlingResponse() {
         int statusCode = lastResponse.getStatusCode();
         Assertions.assertTrue(statusCode == 405 || statusCode == 200,

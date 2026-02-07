@@ -78,7 +78,7 @@ public class PlantCategoryReferenceSteps {
         Assertions.assertNotNull(subCategoryId, "Sub-category ID should be returned");
     }
 
-    @When("the admin creates a plant under that sub-category with valid data")
+    @When("the admin creates a plant under that sub-category for category reference")
     public void createPlantUnderSubCategory() {
         Assertions.assertNotNull(subCategoryId, "Sub-category must exist before creating a plant");
 

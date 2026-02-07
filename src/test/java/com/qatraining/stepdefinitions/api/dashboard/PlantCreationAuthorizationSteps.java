@@ -22,7 +22,7 @@ public class PlantCreationAuthorizationSteps {
     private Response lastResponse;
     private String userToken;
     private static final ConfigManager config = ConfigManager.getInstance();
-    private static final String API_BASE_URL = "http://localhost:8080/api";
+    private static final String API_BASE_URL = ConfigManager.getInstance().getApiBaseUrl();
     private Integer lastCategoryId;
     private String lastPlantName;
 
@@ -32,7 +32,7 @@ public class PlantCreationAuthorizationSteps {
         lastPlantName = "TestPlant_" + System.currentTimeMillis();
     }
 
-    @Given("the user is authenticated")
+    @Given("the user is authenticated as a standard user")
     public void authenticateAsUser() {
         // Try to authenticate as a standard user
         Response authResponse = given()

@@ -61,7 +61,7 @@ public class StockQuantityUpdateSteps {
         currentStock = stockQuantity;
     }
 
-    @And("the initial stock quantity is verified as (\\d+)")
+    @And("the initial stock quantity is verified as {int}")
     public void verifyInitialStock(int expectedStock) {
         Assertions.assertNotNull(plantId, "Plant must be created first");
 
