@@ -99,6 +99,13 @@
             <version>${jackson.version}</version>
         </dependency>
 
+        <!-- org.json for JSON Processing -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20240303</version>
+        </dependency>
+
         <!-- Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
