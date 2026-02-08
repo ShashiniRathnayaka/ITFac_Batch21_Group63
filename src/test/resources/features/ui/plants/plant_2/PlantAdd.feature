@@ -12,7 +12,7 @@ Feature: Add Plant with valid details (Admin view)
     When the user navigates to /ui/plants
     And the user clicks on the Add Plant button
     And the user enters plant name "GloxiniaArborea"
-    And the user selects sub category "Dicots"
+    And the user selects sub category "Flowers"
     And the user enters price "150.50"
     And the user enters quantity "100"
     And the user clicks on the Save button
