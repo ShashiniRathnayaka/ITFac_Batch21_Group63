@@ -219,4 +219,62 @@ public class EditCategoryPage extends BasePage {
             System.out.println("Error selecting different parent category: " + e.getMessage());
         }
     }
+
+    /**
+     * Check if edit icons/buttons are visible on the categories page
+     * Used to verify access control for USER role
+     * 
+     * @return true if any edit button is visible
+     */
+    public boolean areEditIconsVisible() {
+        try {
+            // Wait for page to load
+            page.waitForLoadState();
+            page.waitForTimeout(1000);
+
+            // Check for edit buttons with title="Edit"
+            int editButtonCount = page.locator("a[title='Edit']").count();
+            System.out.println("Edit buttons found: " + editButtonCount);
+
+            return editButtonCount > 0;
+        } catch (Exception e) {
+            System.out.println("Exception checking edit icon visibility: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Check if edit buttons are clickable (not disabled)
+     * Note: HTML anchor tags don't support disabled attribute natively
+     * 
+     * @return true if any edit button is clickable
+     */
+    public boolean areEditIconsClickable() {
+        try {
+            // Find all edit buttons
+            Locator editButtons = page.locator("a[title='Edit']");
+            int buttonCount = editButtons.count();
+
+            if (buttonCount == 0) {
+                System.out.println("No edit buttons found");
+                return false;
+            }
+
+            // Check if at least one button is clickable
+            // Note: disabled attribute on <a> tags is not standard HTML and browsers ignore
+            // it
+            for (int i = 0; i < buttonCount; i++) {
+                Locator button = editButtons.nth(i);
+                if (button.isVisible() && button.isEnabled()) {
+                    System.out.println("Edit button " + (i + 1) + " is clickable");
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (Exception e) {
+            System.out.println("Exception checking edit icon clickability: " + e.getMessage());
+            return false;
+        }
+    }
 }

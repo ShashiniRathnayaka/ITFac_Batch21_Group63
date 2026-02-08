@@ -39,20 +39,19 @@ public class AddMainCategorySteps {
     @When("the user enters valid category name {string} in the Category Name field")
     public void userEntersValidCategoryName(String categoryName) {
         // Make the category name unique while keeping it within 3-10 character limit
-        // Use nanoTime for better uniqueness - take last 3 digits (000-999)
-        long nanoTime = System.nanoTime();
-        int uniqueSuffix = (int) ((nanoTime / 1000) % 1000); // 3 digits for uniqueness
-        String suffix = String.format("%03d", uniqueSuffix); // Always 3 digits: 000-999
+        // Use UUID for better uniqueness (only first 6 hex digits from random UUID)
+        String uuid = java.util.UUID.randomUUID().toString().replace("-", "");
+        String suffix = uuid.substring(0, 6); // Take first 6 chars from UUID
 
-        // Calculate how many chars we can use from the base name (max 10 - 3 = 7)
-        int maxBaseLength = 10 - suffix.length(); // Always 7
+        // Calculate how many chars we can use from the base name (max 10 - 6 = 4)
+        int maxBaseLength = 10 - suffix.length(); // Always 4
         String baseName = categoryName.length() > maxBaseLength
                 ? categoryName.substring(0, maxBaseLength)
                 : categoryName;
 
         // If base name is too short, pad it to ensure minimum length
         if (baseName.length() < 1) {
-            baseName = "Cat"; // Fallback base name
+            baseName = "Cat"; // Fallback base name (3 chars)
         }
 
         String uniqueCategoryName = baseName + suffix;

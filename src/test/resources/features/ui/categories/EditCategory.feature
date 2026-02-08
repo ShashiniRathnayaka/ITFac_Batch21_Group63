@@ -19,15 +19,11 @@ Feature: Edit Category
     And A Success message is displayed
     And The updated record appears in the Category list
 
+  # Known Backend Bug: Edit icons ARE visible and clickable for USER role (should NOT be visible)
+  # This test will FAIL until backend implements proper access control
   @Smoke @Negative @UI_CATEGORY_USER_004
   Scenario: UI_CATEGORY_USER_004 - Verify user cannot edit a category
     Given User is logged in
     And At least one Category record exists
     When the user navigates to "/ui/categories"
-    And the user clicks the Edit icon for a category
-    Then System navigates to Edit Category page
-    When the user changes the value of the "Category Name" field
-    And the user clicks the "Save" button on the form
-    Then Edit action is restricted
-    And Error message is displayed: 403 Forbidden
-    And Category data is not updated
+    Then Edit icon is not visible and clickable

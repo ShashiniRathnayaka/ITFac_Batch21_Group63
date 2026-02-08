@@ -29,4 +29,20 @@ public class TokenHolder {
     public static String getToken() {
         return token;
     }
+
+    public static void setAdminToken(String token) {
+        TokenHolder.adminToken = token;
+    }
+
+    public static void setUserToken(String token) {
+        TokenHolder.userToken = token;
+    }
+
+    public static void useAdminToken() {
+        TokenHolder.token = adminToken;
+    }
+
+    public static void useUserToken() {
+        TokenHolder.token = userToken;
+    }
 }
