@@ -198,7 +198,7 @@ public class SalesUiSteps {
 
             Locator sell = page.getByRole(AriaRole.BUTTON, new com.microsoft.playwright.Page.GetByRoleOptions().setName("Sell"));
             if (sell.count() == 0) sell = page.locator("button:has-text('Sell')");
-            firstVisible(sell).click(new Locator.ClickOptions().setNoWaitAfter(true));
+            firstVisible(sell).click();
 
             try {
                 page.waitForURL("**/ui/sales", new Page.WaitForURLOptions().setTimeout(30_000));
@@ -257,7 +257,7 @@ public class SalesUiSteps {
 
             Locator sell = page.getByRole(AriaRole.BUTTON, new com.microsoft.playwright.Page.GetByRoleOptions().setName("Sell"));
             if (sell.count() == 0) sell = page.locator("button:has-text('Sell')");
-            firstVisible(sell).click(new Locator.ClickOptions().setNoWaitAfter(true));
+            firstVisible(sell).click();
 
             try {
                 page.waitForURL("**/ui/sales", new Page.WaitForURLOptions().setTimeout(30_000));
@@ -577,7 +577,7 @@ public class SalesUiSteps {
         if (submit.count() == 0) submit = page.locator("button[type='submit'], [data-testid='submitSale']");
 
         assertTrue(submit.count() > 0, "Sell/submit button not found - update selector");
-        firstVisible(submit).click(new Locator.ClickOptions().setNoWaitAfter(true));
+        firstVisible(submit).click();
 
         // App may or may not trigger a full navigation; avoid hanging on "scheduled navigations".
         try {
@@ -662,7 +662,7 @@ public class SalesUiSteps {
         if (confirm.count() == 0) confirm = page.getByRole(AriaRole.BUTTON, new com.microsoft.playwright.Page.GetByRoleOptions().setName("Delete"));
 
         if (confirm.count() > 0) {
-            confirm.first().click(new Locator.ClickOptions().setNoWaitAfter(true));
+            confirm.first().click();
         }
 
         page.waitForLoadState(LoadState.DOMCONTENTLOADED);
@@ -747,7 +747,7 @@ public class SalesUiSteps {
         var page = PlaywrightDriverManager.getPage();
         Locator header = findColumnHeader(colName);
         assertTrue(header.count() > 0 && header.isVisible(), "Sort header not found/visible: " + colName);
-        header.click(new Locator.ClickOptions().setNoWaitAfter(true));
+        header.click();
         page.waitForLoadState(LoadState.NETWORKIDLE);
     }
 
