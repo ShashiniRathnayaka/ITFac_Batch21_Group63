@@ -73,7 +73,6 @@ public class PlantsPageAPI {
                         .setHeader("Accept", "application/json"));
     }
 
-<<<<<<< HEAD
     public void getPagedPlantsList(int page, int size) {
         Playwright playwright = Playwright.create();
         APIRequestContext request = playwright.request().newContext();
@@ -85,8 +84,6 @@ public class PlantsPageAPI {
                         .setHeader("Authorization", "Bearer " + TokenHolder.getToken())
                         .setHeader("Accept", "application/json"));
     }
-=======
->>>>>>> 5cfd44caa99fbc0f83d75b01d6092ee46b1a6251
 
     public int getStatusCode() {
         return response.status();
@@ -100,4 +97,4 @@ public class PlantsPageAPI {
         return response;
     }
 }
-}
+
