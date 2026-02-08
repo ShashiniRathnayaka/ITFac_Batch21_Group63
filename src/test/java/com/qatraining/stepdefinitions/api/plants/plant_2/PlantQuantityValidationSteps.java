@@ -1,0 +1,72 @@
+package com.qatraining.stepdefinitions.api.plants.plant_2;
+
+import com.qatraining.api.Plants.plant_2.PlantQuantityValidationAPI;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import org.json.JSONObject;
+import org.junit.jupiter.api.Assertions;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class PlantQuantityValidationSteps {
+
+    private final PlantQuantityValidationAPI api = new PlantQuantityValidationAPI();
+    private int lastStatus;
+    private String lastBody;
+
+    @When("user sends POST to \\/api\\/plants\\/category\\/{int} with negative-quantity data:")
+    public void userSendsPostWithNegativeQuantity(int categoryId, DataTable table) {
+        List<Map<String, String>> rows = table.asMaps(String.class, String.class);
+        Map<String, Object> body = new HashMap<>();
+        if (!rows.isEmpty()) {
+            Map<String, String> r = rows.get(0);
+            Map<String, String> normalized = new HashMap<>();
+            for (Map.Entry<String, String> e : r.entrySet()) {
+                normalized.put(e.getKey().trim(), e.getValue());
+            }
+            if (normalized.containsKey("id")) body.put("id", Integer.parseInt(normalized.get("id")));
+            if (normalized.containsKey("name")) body.put("name", normalized.get("name"));
+            if (normalized.containsKey("price")) body.put("price", Integer.parseInt(normalized.get("price")));
+            if (normalized.containsKey("quantity")) body.put("quantity", Integer.parseInt(normalized.get("quantity")));
+            if (normalized.containsKey("category_Id")) body.put("category_Id", Integer.parseInt(normalized.get("category_Id")));
+        }
+
+        try {
+            api.createPlant(categoryId, body);
+            lastStatus = api.getStatusCode();
+            lastBody = api.getResponseBody();
+            System.out.println("DEBUG: Status=" + lastStatus + " Body=" + lastBody);
+        } catch (Exception e) {
+            lastStatus = -1;
+            lastBody = e.getMessage();
+            System.out.println("DEBUG: Exception while creating plant: " + e.getMessage());
+        }
+    }
+
+    @Then("quantity validation response should have status {int}")
+    public void quantityValidationResponseStatus(int expected) {
+        Assertions.assertEquals(expected, lastStatus, "Unexpected status code. Response body: " + lastBody);
+    }
+
+    @Then("the response should contain validation error for quantity")
+    public void responseShouldContainValidationErrorForQuantity() {
+        Assertions.assertNotNull(lastBody, "Response body is null");
+        JSONObject json = new JSONObject(lastBody);
+        Assertions.assertTrue(json.has("details"), "Response should contain 'details' field");
+        JSONObject details = json.getJSONObject("details");
+        Assertions.assertTrue(details.has("quantity"), "Details should contain 'quantity' validation error");
+        String msg = details.getString("quantity");
+        Assertions.assertEquals("Quantity cannot be negative", msg, "Unexpected quantity validation message: " + msg);
+    }
+
+    @Then("quantity validation response should contain error message {string}")
+    public void quantityValidationResponseShouldContainErrorMessage(String expectedMessage) {
+        Assertions.assertNotNull(lastBody, "Response body is null");
+        JSONObject json = new JSONObject(lastBody);
+        Assertions.assertTrue(json.has("message"), "Response should contain 'message' field");
+        Assertions.assertEquals(expectedMessage, json.getString("message"), "Error message mismatch");
+    }
+}
