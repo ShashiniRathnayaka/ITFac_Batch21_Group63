@@ -81,6 +81,10 @@ public class PlaywrightDriverManager {
      * Navigate to URL
      */
     public static void navigateTo(String url) {
+        if (getPage() == null) {
+            // Ensure driver initialized for this thread
+            initializeDriver();
+        }
         getPage().navigate(url);
     }
 

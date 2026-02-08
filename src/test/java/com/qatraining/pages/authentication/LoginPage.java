@@ -10,7 +10,7 @@ import com.qatraining.pages.BasePage;
  */
 public class LoginPage extends BasePage {
 
-    // Locators (stable)
+    // Locators (matching actual HTML: <input type="text" name="username">, <input type="password" name="password">, <button type="submit">Login</button>)
     private static final String USERNAME_INPUT = "input[name='username']";
     private static final String PASSWORD_INPUT = "input[name='password']";
     private static final String LOGIN_BUTTON   = "button[type='submit']";
@@ -26,7 +26,7 @@ public class LoginPage extends BasePage {
 
     /** Navigate to login page */
     public void navigateToLoginPage() {
-        // baseURL is already set in PlaywrightDriverManager
+        // baseURL is set to http://localhost:8081
         navigate("/ui/login");
         // ensure page is ready
         page.waitForSelector(LOGIN_BUTTON);

@@ -158,6 +158,24 @@ public class DeleteCategorySteps {
         System.out.println("Verified: Delete action is disabled or restricted for USER role");
     }
 
+    @Then("Delete icon is not visible")
+    public void deleteIconIsNotVisible() {
+        deleteCategoryPage = new DeleteCategoryPage(PlaywrightDriverManager.getPage());
+
+        // Wait for page to fully load
+        PlaywrightDriverManager.getPage().waitForLoadState();
+        PlaywrightDriverManager.getPage().waitForTimeout(1000);
+
+        // Check if delete icons are visible
+        boolean deleteIconsVisible = deleteCategoryPage.areDeleteIconsVisible();
+
+        // KNOWN BUG: Delete icons ARE visible to USER role (they should NOT be visible)
+        Assertions.assertFalse(deleteIconsVisible,
+                "Delete icons should NOT be visible for USER role, but they are visible (BACKEND BUG)");
+
+        System.out.println("Verified: Delete icons are not visible for USER role");
+    }
+
     @Then("Category is not deleted")
     public void categoryIsNotDeleted() {
         categoriesPage = new CategoriesPage(PlaywrightDriverManager.getPage());

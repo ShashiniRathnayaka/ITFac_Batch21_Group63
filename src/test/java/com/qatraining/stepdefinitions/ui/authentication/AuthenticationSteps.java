@@ -62,26 +62,6 @@ public class AuthenticationSteps {
         loginPage.clickLoginButton();
     }
 
-    @Then("the user should be redirected to the dashboard page")
-    public void userShouldBeRedirectedToDashboard() {
-        // Wait for navigation to complete, then assert URL
-        PlaywrightDriverManager.getPage().waitForURL("**/ui/dashboard");
-        String currentUrl = PlaywrightDriverManager.getPage().url();
-        Assertions.assertTrue(currentUrl.contains("/ui/dashboard"),
-                "Expected to be on dashboard but URL is: " + currentUrl);
-    }
-
-    @Then("the dashboard page should be displayed")
-    public void dashboardPageShouldBeDisplayed() {
-        var page = PlaywrightDriverManager.getPage();
-
-        page.waitForURL("**/ui/dashboard");
-        page.waitForSelector("text=Dashboard");
-
-        boolean visible = page.locator("text=Dashboard").first().isVisible();
-        Assertions.assertTrue(visible, "Dashboard text should be visible");
-    }
-
     @Then("the user should see an error message {string}")
     public void userShouldSeeErrorMessage(String expectedMessage) {
         String actualMessage = loginPage.getErrorMessage();

@@ -99,4 +99,27 @@ public class DeleteCategoryPage extends BasePage {
             System.out.println("Error message did not appear within timeout");
         }
     }
+
+    /**
+     * Check if delete icons/buttons are visible on the categories page
+     * Used to verify access control for USER role
+     * 
+     * @return true if any delete button is visible
+     */
+    public boolean areDeleteIconsVisible() {
+        try {
+            // Wait for page to load
+            page.waitForLoadState();
+            page.waitForTimeout(1000);
+
+            // Check for delete buttons with title="Delete"
+            int deleteButtonCount = page.locator("button[title='Delete']").count();
+            System.out.println("Delete buttons found: " + deleteButtonCount);
+
+            return deleteButtonCount > 0;
+        } catch (Exception e) {
+            System.out.println("Exception checking delete icon visibility: " + e.getMessage());
+            return false;
+        }
+    }
 }

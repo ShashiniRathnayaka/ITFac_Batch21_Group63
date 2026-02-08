@@ -48,7 +48,7 @@ public class EditCategorySteps {
         int uniqueSuffix = (int) ((nanoTime / 1000) % 1000); // 3 digits for uniqueness
         String suffix = String.format("%03d", uniqueSuffix); // Always 3 digits: 000-999
 
-        int maxBaseLength = 10 - suffix.length(); 
+        int maxBaseLength = 10 - suffix.length();
         String baseName = categoryName.length() > maxBaseLength
                 ? categoryName.substring(0, maxBaseLength)
                 : categoryName;
@@ -188,5 +188,28 @@ public class EditCategorySteps {
         // Another way to verify is to check that error message is present
         Assertions.assertTrue(editCategoryPage.isErrorMessageDisplayed(),
                 "Error message should still be displayed, confirming update failed");
+    }
+
+    @Then("Edit icon is not visible and clickable")
+    public void editIconIsNotVisibleAndClickable() {
+        editCategoryPage = new EditCategoryPage(PlaywrightDriverManager.getPage());
+
+        // Wait for page to fully load
+        PlaywrightDriverManager.getPage().waitForLoadState();
+        PlaywrightDriverManager.getPage().waitForTimeout(1000);
+
+        // Check if edit icons are visible
+        boolean editIconsVisible = editCategoryPage.areEditIconsVisible();
+
+        // KNOWN BUG: Edit icons ARE visible to USER role (they should NOT be visible)
+        Assertions.assertFalse(editIconsVisible,
+                "Edit icons should NOT be visible for USER role, but they are visible (BACKEND BUG)");
+
+        // Check if edit icons are clickable (additional validation)
+        boolean editIconsClickable = editCategoryPage.areEditIconsClickable();
+        Assertions.assertFalse(editIconsClickable,
+                "Edit icons should NOT be clickable for USER role, but they are clickable (BACKEND BUG)");
+
+        System.out.println("Verified: Edit icons are not visible and not clickable for USER role");
     }
 }

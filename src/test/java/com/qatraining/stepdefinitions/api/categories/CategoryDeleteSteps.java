@@ -17,6 +17,7 @@ public class CategoryDeleteSteps {
     private final CategoryDeletePageAPI categoryDeletePageAPI = new CategoryDeletePageAPI();
     private int deletedCategoryId;
     private String deletedCategoryName;
+    private String errorResponseBody; // Store error response before subsequent API calls
 
     @Given("Category exists with no sub categories linked")
     public void categoryExistsWithNoSubCategoriesLinked() {
@@ -126,5 +127,77 @@ public class CategoryDeleteSteps {
         }
 
         System.out.println("Verified: No error message returned");
+    }
+
+    @When("User sends a DELETE request to {string} with category id")
+    public void userSendsDeleteRequestWithCategoryId(String endpoint) {
+        // Get an existing category ID
+        categoryDeletePageAPI.getCategoriesList();
+        String response = categoryDeletePageAPI.getResponseBody();
+        JSONArray arr = new JSONArray(response);
+        assertTrue(arr.length() > 0, "No categories available to attempt deletion");
+        deletedCategoryId = arr.getJSONObject(0).getInt("id");
+
+        System.out.println("User attempting DELETE " + endpoint + "/" + deletedCategoryId);
+
+        categoryDeletePageAPI.deleteCategory(deletedCategoryId);
+
+        assertNotNull(
+                categoryDeletePageAPI.getResponse(),
+                "API response is null. DELETE request may not have been sent.");
+    }
+
+    @Then("API returns {int} Forbidden status code for delete operation")
+    public void apiReturnsForbiddenStatusCodeForDeleteOperation(int expectedStatusCode) {
+        int actualStatus = categoryDeletePageAPI.getStatusCode();
+        errorResponseBody = categoryDeletePageAPI.getResponseBody(); // Store for later validation
+        System.out.println("Status Code: " + actualStatus);
+        System.out.println("Response Body: " + errorResponseBody);
+        assertEquals(expectedStatusCode, actualStatus,
+                "Expected " + expectedStatusCode + " Forbidden but got " + actualStatus);
+    }
+
+    @Then("Category is not deleted from system")
+    public void categoryIsNotDeletedFromSystem() {
+        // Verify the category still exists by fetching the current data
+        categoryDeletePageAPI.getCategoriesList();
+        String response = categoryDeletePageAPI.getResponseBody();
+        JSONArray arr = new JSONArray(response);
+
+        // Find the category we attempted to delete
+        boolean categoryFound = false;
+        for (int i = 0; i < arr.length(); i++) {
+            JSONObject category = arr.getJSONObject(i);
+            if (category.getInt("id") == deletedCategoryId) {
+                categoryFound = true;
+                System.out.println("Verified: Category ID " + deletedCategoryId + " still exists (name: "
+                        + category.getString("name") + ")");
+                break;
+            }
+        }
+
+        assertTrue(categoryFound, "Category should still exist in the system after failed delete attempt");
+        System.out.println("Verified: Category was not deleted");
+    }
+
+    @Then("Error message indicates permission denied")
+    public void errorMessageIndicatesPermissionDenied() {
+        assertNotNull(errorResponseBody, "Error response body should not be null");
+
+        JSONObject responseJson = new JSONObject(errorResponseBody);
+
+        // Verify error response structure
+        assertTrue(responseJson.has("error"), "Response should contain 'error' field");
+        assertTrue(responseJson.has("status"), "Response should contain 'status' field");
+        assertTrue(responseJson.has("timestamp"), "Response should contain 'timestamp' field");
+        assertTrue(responseJson.has("path"), "Response should contain 'path' field");
+
+        String error = responseJson.getString("error");
+        int status = responseJson.getInt("status");
+
+        assertEquals("Forbidden", error, "Error message should be 'Forbidden'");
+        assertEquals(403, status, "Status in response body should be 403");
+
+        System.out.println("Verified: Permission denied error - " + error);
     }
 }
