@@ -8,28 +8,28 @@ import com.qatraining.utils.TokenHolder;
 
 import java.util.Map;
 
+//this is the page object for the plants API
 public class PlantsPageAPI {
 
-    public void deletePlant(int plantId) {
+        public void deletePlant(int plantId) {
         Playwright playwright = Playwright.create();
         APIRequestContext request = playwright.request().newContext();
         response = request.delete(
-                BASE_URL + "/api/plants/" + plantId,
-                RequestOptions.create()
-                        .setHeader("Authorization", "Bearer " + TokenHolder.getToken())
-                        .setHeader("Accept", "/"));
-    }
+            BASE_URL + "/api/plants/" + plantId,
+            RequestOptions.create()
+                .setHeader("Authorization", "Bearer " + TokenHolder.getToken())
+                .setHeader("Accept", "/"));
+        }
 
-    public void getPlantById(int plantId) {
+        public void getPlantById(int plantId) {
         Playwright playwright = Playwright.create();
         APIRequestContext request = playwright.request().newContext();
         response = request.get(
-                BASE_URL + "/api/plants/" + plantId,
-                RequestOptions.create()
-                        .setHeader("Authorization", "Bearer " + TokenHolder.getToken())
-                        .setHeader("Accept", "/"));
-    }
-
+            BASE_URL + "/api/plants/" + plantId,
+            RequestOptions.create()
+                .setHeader("Authorization", "Bearer " + TokenHolder.getToken())
+                .setHeader("Accept", "/"));
+        }
     public void createPlant(int categoryId, Map<String, Object> body) {
         Playwright playwright = Playwright.create();
         APIRequestContext request = playwright.request().newContext();
@@ -41,6 +41,7 @@ public class PlantsPageAPI {
                         .setData(body));
     }
 
+
     private static final String BASE_URL = "http://localhost:8080";
     private APIResponse response;
 
@@ -51,6 +52,7 @@ public class PlantsPageAPI {
 
         System.out.println("TOKEN USED: " + TokenHolder.getToken());
 
+
         response = request.put(
                 BASE_URL + "/api/plants/" + plantId,
                 RequestOptions.create()
@@ -59,12 +61,25 @@ public class PlantsPageAPI {
                         .setData(body));
     }
 
+
     public void getPlantsList() {
         Playwright playwright = Playwright.create();
         APIRequestContext request = playwright.request().newContext();
 
         response = request.get(
                 BASE_URL + "/api/plants",
+                RequestOptions.create()
+                        .setHeader("Authorization", "Bearer " + TokenHolder.getToken())
+                        .setHeader("Accept", "application/json"));
+    }
+
+    public void getPagedPlantsList(int page, int size) {
+        Playwright playwright = Playwright.create();
+        APIRequestContext request = playwright.request().newContext();
+
+        String url = String.format("%s/api/plants/paged?page=%d&size=%d", BASE_URL, page, size);
+        response = request.get(
+                url,
                 RequestOptions.create()
                         .setHeader("Authorization", "Bearer " + TokenHolder.getToken())
                         .setHeader("Accept", "application/json"));
@@ -82,3 +97,4 @@ public class PlantsPageAPI {
         return response;
     }
 }
+

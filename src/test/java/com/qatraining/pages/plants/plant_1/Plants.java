@@ -3,9 +3,9 @@ package com.qatraining.pages.plants.plant_1;
 import com.microsoft.playwright.Page;
 import com.qatraining.pages.BasePage;
 
-/**
- * Page object for Plants page with category filter functionality
- */
+
+ //Page object for Plants page with category filter functionality
+ 
 public class Plants extends BasePage {
 
     private static final String PLANTS_PATH = "/ui/plants";
