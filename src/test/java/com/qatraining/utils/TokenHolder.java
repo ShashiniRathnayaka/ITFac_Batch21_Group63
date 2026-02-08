@@ -10,6 +10,22 @@ public class TokenHolder {
         TokenHolder.token = token;
     }
 
+    public static void setAdminToken(String token) {
+        adminToken = token;
+    }
+
+    public static void setUserToken(String token) {
+        userToken = token;
+    }
+
+    public static void useAdminToken() {
+        token = adminToken;
+    }
+
+    public static void useUserToken() {
+        token = userToken;
+    }
+
     public static String getToken() {
         return token;
     }

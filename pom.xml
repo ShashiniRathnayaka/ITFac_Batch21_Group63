@@ -19,7 +19,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         
         <!-- Dependency Versions -->
-        <playwright.version>1.41.0</playwright.version>
+        <playwright.version>1.58.0</playwright.version>
         <cucumber.version>7.15.0</cucumber.version>
         <junit.version>5.10.1</junit.version>
         <rest-assured.version>5.4.0</rest-assured.version>
@@ -99,7 +99,7 @@
             <version>${jackson.version}</version>
         </dependency>
 
-        <!-- org.json for JSON Processing -->
+         <!-- org.json for JSON Processing -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
@@ -123,7 +123,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.14.0</version>
+            <version>3.12.0</version>
         </dependency>
     </dependencies>
 
