@@ -110,4 +110,47 @@ public class PlantUpdateSteps {
             "Plant price was modified despite unauthorized update attempt");
         System.out.println("DEBUG: Plant data verification passed - not modified");
     }
+    @io.cucumber.java.en.Given("An admin is authenticated and a valid plant exists")
+    public void adminAuthenticatedAndPlantExists() {
+        com.qatraining.utils.TokenHolder.useAdminToken();
+        plantsPageAPI.getPlantsList();
+        String response = plantsPageAPI.getResponseBody();
+        org.json.JSONArray arr = new org.json.JSONArray(response);
+        assertTrue(arr.length() > 0, "No plants available to update");
+        testPlantId = arr.getJSONObject(0).getInt("id");
+        originalPlantData = arr.getJSONObject(0);
+    }
+
+    @io.cucumber.java.en.When("Admin sends PUT request to update plant category name with existing sub category name")
+    public void adminUpdatesPlantCategoryName() {
+        // Use existing plant details, only change category name
+        Map<String, Object> category = new HashMap<>();
+        category.put("id", originalPlantData.getJSONObject("category").getInt("id"));
+        category.put("name", "komarika"); // Use a valid sub-category name if possible
+
+        updateBody = new HashMap<>();
+        updateBody.put("id", testPlantId);
+        updateBody.put("name", originalPlantData.getString("name"));
+        updateBody.put("price", originalPlantData.getInt("price"));
+        updateBody.put("quantity", originalPlantData.getInt("quantity"));
+        updateBody.put("category", category);
+
+        plantsPageAPI.updatePlant(testPlantId, updateBody);
+        assertNotNull(plantsPageAPI.getResponse(), "API response is null. PUT request may not have been sent.");
+    }
+
+    @io.cucumber.java.en.Then("API should return 200 OK for plant category update")
+    public void verifyCategoryUpdateStatusCode() {
+        int status = plantsPageAPI.getStatusCode();
+        System.out.println("Status Code: " + status);
+        System.out.println("Response Body: " + plantsPageAPI.getResponseBody());
+        assertEquals(200, status, "Expected 200 OK but got " + status);
+    }
+
+    @io.cucumber.java.en.Then("Updated plant category name should be reflected in response")
+    public void verifyUpdatedCategoryName() {
+        JSONObject responseJson = new JSONObject(plantsPageAPI.getResponseBody());
+        JSONObject category = responseJson.getJSONObject("category");
+        assertEquals("komarika", category.getString("name"), "Category name was not updated as expected");
+    }
 }
