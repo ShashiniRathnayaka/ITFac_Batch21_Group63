@@ -10,6 +10,7 @@ import java.util.Map;
 
 //this is the page object for the plants API
 public class PlantsPageAPI {
+
         public void deletePlant(int plantId) {
         Playwright playwright = Playwright.create();
         APIRequestContext request = playwright.request().newContext();
@@ -17,7 +18,7 @@ public class PlantsPageAPI {
             BASE_URL + "/api/plants/" + plantId,
             RequestOptions.create()
                 .setHeader("Authorization", "Bearer " + TokenHolder.getToken())
-                .setHeader("Accept", "*/*"));
+                .setHeader("Accept", "/"));
         }
 
         public void getPlantById(int plantId) {
@@ -27,7 +28,7 @@ public class PlantsPageAPI {
             BASE_URL + "/api/plants/" + plantId,
             RequestOptions.create()
                 .setHeader("Authorization", "Bearer " + TokenHolder.getToken())
-                .setHeader("Accept", "*/*"));
+                .setHeader("Accept", "/"));
         }
     public void createPlant(int categoryId, Map<String, Object> body) {
         Playwright playwright = Playwright.create();
@@ -40,6 +41,7 @@ public class PlantsPageAPI {
                         .setData(body));
     }
 
+
     private static final String BASE_URL = "http://localhost:8080";
     private APIResponse response;
 
@@ -48,6 +50,9 @@ public class PlantsPageAPI {
         Playwright playwright = Playwright.create();
         APIRequestContext request = playwright.request().newContext();
 
+        System.out.println("TOKEN USED: " + TokenHolder.getToken());
+
+
         response = request.put(
                 BASE_URL + "/api/plants/" + plantId,
                 RequestOptions.create()
@@ -55,6 +60,7 @@ public class PlantsPageAPI {
                         .setHeader("Content-Type", "application/json")
                         .setData(body));
     }
+
 
     public void getPlantsList() {
         Playwright playwright = Playwright.create();
@@ -67,6 +73,7 @@ public class PlantsPageAPI {
                         .setHeader("Accept", "application/json"));
     }
 
+<<<<<<< HEAD
     public void getPagedPlantsList(int page, int size) {
         Playwright playwright = Playwright.create();
         APIRequestContext request = playwright.request().newContext();
@@ -78,6 +85,8 @@ public class PlantsPageAPI {
                         .setHeader("Authorization", "Bearer " + TokenHolder.getToken())
                         .setHeader("Accept", "application/json"));
     }
+=======
+>>>>>>> 5cfd44caa99fbc0f83d75b01d6092ee46b1a6251
 
     public int getStatusCode() {
         return response.status();
@@ -90,4 +99,5 @@ public class PlantsPageAPI {
     public APIResponse getResponse() {
         return response;
     }
+}
 }
