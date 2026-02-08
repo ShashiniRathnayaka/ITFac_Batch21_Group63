@@ -8,6 +8,7 @@ import com.qatraining.utils.TokenHolder;
 
 import java.util.Map;
 
+//this is the page object for the plants API
 public class PlantsPageAPI {
         public void deletePlant(int plantId) {
         Playwright playwright = Playwright.create();
@@ -61,6 +62,18 @@ public class PlantsPageAPI {
 
         response = request.get(
                 BASE_URL + "/api/plants",
+                RequestOptions.create()
+                        .setHeader("Authorization", "Bearer " + TokenHolder.getToken())
+                        .setHeader("Accept", "application/json"));
+    }
+
+    public void getPagedPlantsList(int page, int size) {
+        Playwright playwright = Playwright.create();
+        APIRequestContext request = playwright.request().newContext();
+
+        String url = String.format("%s/api/plants/paged?page=%d&size=%d", BASE_URL, page, size);
+        response = request.get(
+                url,
                 RequestOptions.create()
                         .setHeader("Authorization", "Bearer " + TokenHolder.getToken())
                         .setHeader("Accept", "application/json"));

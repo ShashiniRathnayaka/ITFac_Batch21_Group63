@@ -54,4 +54,38 @@ public class PlantsEditSteps {
         Assertions.assertTrue(count > 0, "Expected remaining plants on next page");
     }
 
+    @Given("admin is logged in and plant with subcategory exists")
+    public void adminLoggedInAndPlantExists() {
+        plantsPage.navigateToPlantsPage();
+        // Assume login and plant/subcategory setup is handled in Background
+    }
+
+    @When("admin clicks edit icon button")
+    public void adminClicksEditIcon() {
+        plantsPage.clickEditIcon();
+    }
+
+    @When("admin selects subcategory {string} from dropdown")
+    public void adminSelectsSubcategory(String subCategory) {
+        plantsPage.selectSubCategory(subCategory);
+    }
+
+    @When("admin clicks save button")
+    public void adminClicksSaveButton() {
+        plantsPage.clickSaveButton();
+    }
+
+    @Then("plant category name should be updated to {string} and displayed in plant list")
+    public void plantCategoryNameShouldBeUpdated(String expectedCategory) {
+        // Verify that the category was updated to the expected value
+        String actualCategory = plantsPage.getPlantCategory();
+        Assertions.assertEquals(expectedCategory, actualCategory, "Plant category name should be updated to " + expectedCategory);
+    }
+
+    @Then("update success message should be displayed")
+    public void updateSuccessMessageShouldBeDisplayed() {
+        // Verify that a success message is displayed after update
+        Assertions.assertTrue(plantsPage.isSuccessMessageDisplayed(), "Update success message should be displayed");
+    }
+
 }

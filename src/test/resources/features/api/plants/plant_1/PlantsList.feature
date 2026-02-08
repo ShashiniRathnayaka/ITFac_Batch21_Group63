@@ -22,3 +22,13 @@ Feature: Plants API - Retrieve Plant List
     When User sends GET request to retrieve plant by ID
     Then API should return 200 OK for plant get by ID
     And Response should contain correct plant details for requested ID
+
+  @nonadminapi
+  @retrieve-page-with-pagination-user
+  Scenario: API_PLANT_USER_009 - Retrieve paginated plant list with default parameters
+    When User sends GET request to retrieve paginated plants with default parameters
+    Then API should return 200 OK for paginated plants list
+    And Response should contain paginated plant data with correct structure
+    And Response should include pagination metadata with totalElements, totalPages, and pageInfo
+    And Exactly 10 or fewer plants should be returned
+    And Response indicates this is the first page

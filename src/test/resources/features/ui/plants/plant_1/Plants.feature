@@ -1,5 +1,6 @@
+@Plants_FullSuite
 @UI @Plants @Filter
-Feature: Plants category filter (Admin view)
+Feature: Plants module functionality
 
   Background: Admin is logged in
     Given the user navigates to the login page
@@ -8,6 +9,7 @@ Feature: Plants category filter (Admin view)
     And the user clicks on the login button
     Then the user should be redirected to the dashboard page
 
+  @ui-plant-admin-filter
   Scenario: Verify Category Filter Functionality for Admin
     When the user navigates to Plants page
     And the user selects category "rose" from dropdown
@@ -15,6 +17,7 @@ Feature: Plants category filter (Admin view)
     Then only plants from selected category should be displayed
     And the URL should contain categoryId "4"
 
+  @ui-plant-admin-nofound-plant
   Scenario: Verify No Plants Found Message for Admin
     When the user navigates to Plants page
     And the user enters keyword "nonexistent-plant-xyz"

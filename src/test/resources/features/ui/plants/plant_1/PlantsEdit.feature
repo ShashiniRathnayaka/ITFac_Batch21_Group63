@@ -15,3 +15,12 @@ Feature: Plants pagination (Admin view)
     And pagination controls should be visible
     When the user clicks Next
     Then the next page should display remaining plants
+
+  @UI_PLANT_Admin_EDIT_CATEGORY 
+  Scenario: UI_PLANT_Admin_EDIT_CATEGORY - Verify that admin can update plant category name by selecting existing sub category
+    Given admin is logged in and plant with subcategory exists
+    When admin clicks edit icon button
+    And admin selects subcategory "komarika" from dropdown
+    And admin clicks save button
+    Then plant category name should be updated to "komarika" and displayed in plant list
+    And update success message should be displayed
