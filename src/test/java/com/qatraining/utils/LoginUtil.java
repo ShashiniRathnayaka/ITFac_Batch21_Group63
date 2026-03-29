@@ -1,3 +1,4 @@
+
 package com.qatraining.utils;
 
 import com.microsoft.playwright.*;
