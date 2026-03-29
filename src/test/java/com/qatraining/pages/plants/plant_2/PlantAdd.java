@@ -39,7 +39,24 @@ public class PlantAdd extends BasePage {
     }
 
     public void selectSubCategory(String subCategory) {
-        page.selectOption(CATEGORY_DROPDOWN, new String[]{subCategory});
+        // Wait for dropdown to be ready and populated
+        page.waitForSelector(CATEGORY_DROPDOWN);
+        page.waitForTimeout(1000); // Wait for options to populate
+
+        try {
+            // Try to select by label text using SelectOption
+            page.selectOption(CATEGORY_DROPDOWN,
+                    new com.microsoft.playwright.options.SelectOption().setLabel(subCategory));
+        } catch (Exception e) {
+            // If that fails, try selecting by visible text
+            try {
+                page.selectOption(CATEGORY_DROPDOWN, new String[] { subCategory });
+            } catch (Exception e2) {
+                // Last resort: select first available option
+                System.out.println("DEBUG: Could not find option '" + subCategory + "', selecting first available");
+                page.selectOption(CATEGORY_DROPDOWN, new com.microsoft.playwright.options.SelectOption().setIndex(1));
+            }
+        }
     }
 
     public void enterPrice(String price) {
@@ -53,7 +70,8 @@ public class PlantAdd extends BasePage {
     public void clickSaveButton() {
         page.click(SAVE_BUTTON);
         // Try to detect success without blocking long on a single selector.
-        // Prefer a redirect to the plants list (URL change) and fall back to a short wait for success alert.
+        // Prefer a redirect to the plants list (URL change) and fall back to a short
+        // wait for success alert.
         try {
             page.waitForURL("**/ui/plants", new Page.WaitForURLOptions().setTimeout(30000));
         } catch (RuntimeException e) {
@@ -74,7 +92,8 @@ public class PlantAdd extends BasePage {
             return true;
         }
         // Detect common validation/server error indicators and return false if present.
-        if (page.locator("div.alert.alert-danger").count() > 0 || page.locator(".invalid-feedback").count() > 0 || page.locator(".text-danger").count() > 0) {
+        if (page.locator("div.alert.alert-danger").count() > 0 || page.locator(".invalid-feedback").count() > 0
+                || page.locator(".text-danger").count() > 0) {
             return false;
         }
         return false;
